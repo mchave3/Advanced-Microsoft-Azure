@@ -9,4 +9,8 @@ function Import-Xaml {
 }
 
 $window = Import-Xaml
+
+# Set the icon after importing the XAML
+$window.Icon = New-Object System.Windows.Media.Imaging.BitmapImage -ArgumentList (New-Object System.Uri "$PSScriptRoot\Icon\16x16.ico")
+
 $window.ShowDialog()
