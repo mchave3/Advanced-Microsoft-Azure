@@ -1,18 +1,39 @@
-﻿function Add-ControlVariables {
-	New-Variable -Name 'Button_Connection' -Value $window.FindName('Button_Connection') -Scope 1 -Force
-}
+﻿############################################################################################################################
+#
+# Version : 1.0
+#
+# Created : dd/MM/YYYY
+#
+# Author : Mickael CHAVE
+#
+# Revisions:
+# ----------
+# 1.0    dd/MM/YYYY    Creation.
+#
+#
+# Purpose : This script...
+#
+############################################################################################################################
 
+# Import necessary libraries
 [System.Reflection.Assembly]::LoadWithPartialName("PresentationFramework") | Out-Null
 
+# Load the XAML file and create a window from it
 function Import-Xaml {
 	[xml]$xaml = Get-Content -Path $PSScriptRoot\WpfWindow1.xaml
 	$manager = New-Object System.Xml.XmlNamespaceManager -ArgumentList $xaml.NameTable
 	$manager.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml");
-	$xaml.SelectNodes("//*[@x:Name='Button']", $manager)[0].RemoveAttribute('Click')
 	$xaml.SelectNodes("//*[@x:Name='Button_Connection']", $manager)[0].RemoveAttribute('Click')
 	$xamlReader = New-Object System.Xml.XmlNodeReader $xaml
 	[Windows.Markup.XamlReader]::Load($xamlReader)
-}
+}
+
+# Create a new variable that is a reference to a button in the user interface
+function Add-ControlVariables {
+	New-Variable -Name 'Button_Connection' -Value $window.FindName('Button_Connection') -Scope 1 -Force
+}
+
+# Add an event handler to the 'Button_Connection' button
 function Set-EventHandler {
 	$Button_Connection.add_Click({
 		param([System.Object]$sender,[System.Windows.RoutedEventArgs]$e)
@@ -20,22 +41,25 @@ function Set-EventHandler {
 	})
 }
 
-$window = Import-Xaml
-
-# Set the icon after importing the XAML
-	$Icon = New-Object System.Windows.Media.Imaging.BitmapImage -ArgumentList (New-Object System.Uri "$PSScriptRoot\Icon\32x32.ico")
-	$window.Icon = $Icon
-
-# This is the toolbar icon and description
-	$window.TaskbarItemInfo = New-Object System.Windows.Shell.TaskbarItemInfo
-	$window.TaskbarItemInfo.Description = $window.Title
-Add-ControlVariables
-Set-EventHandler
-
-function Click_connection
-{
+# Function called when the 'Button_Connection' button is clicked
+function Click_connection {
 	param($sender, $e)
 }
 
+# Import the XAML file and create a window
+$window = Import-Xaml
 
+# Set the window's icon
+$Icon = New-Object System.Windows.Media.Imaging.BitmapImage -ArgumentList (New-Object System.Uri "$PSScriptRoot\Icon\32x32.ico")
+$window.Icon = $Icon
+
+# Set the window's description
+$window.TaskbarItemInfo = New-Object System.Windows.Shell.TaskbarItemInfo
+$window.TaskbarItemInfo.Description = $window.Title
+
+# Add control variables and set event handlers
+Add-ControlVariables
+Set-EventHandler
+
+# Display the window to the user
 $window.ShowDialog()
