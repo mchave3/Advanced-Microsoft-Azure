@@ -26,7 +26,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Icon\icon.ico" />
+    <Content Include="Icon\16x16.ico" />
+    <Content Include="Icon\256x256.ico" />
+    <Content Include="Icon\32x32.ico" />
+    <Content Include="Icon\48x48.ico" />
     <Content Include="Icon\icon.png" />
     <Content Include="WpfWindow1.xaml">
       <Resource>False</Resource>
