@@ -11,6 +11,11 @@ function Import-Xaml {
 $window = Import-Xaml
 
 # Set the icon after importing the XAML
-$window.Icon = New-Object System.Windows.Media.Imaging.BitmapImage -ArgumentList (New-Object System.Uri "$PSScriptRoot\Icon\32x32.ico")
+$Icon = New-Object System.Windows.Media.Imaging.BitmapImage -ArgumentList (New-Object System.Uri "$PSScriptRoot\Icon\32x32.ico")
+$window.Icon = $Icon
+
+# This is the toolbar icon and description
+$window.TaskbarItemInfo = New-Object System.Windows.Shell.TaskbarItemInfo
+$window.TaskbarItemInfo.Description = $window.Title
 
 $window.ShowDialog()
