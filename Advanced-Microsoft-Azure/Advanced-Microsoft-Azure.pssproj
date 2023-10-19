@@ -38,7 +38,9 @@
     <Content Include="Icon\48x48.ico">
       <Resource>True</Resource>
     </Content>
-    <Content Include="Icon\icon.png" />
+    <Content Include="Icon\icon.png">
+      <Resource>True</Resource>
+    </Content>
     <Content Include="WpfWindow1.xaml">
       <Resource>True</Resource>
     </Content>

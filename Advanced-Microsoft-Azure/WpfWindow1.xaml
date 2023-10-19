@@ -4,6 +4,6 @@
     Title="Advanced Microsoft Azure" Height="720" Width="1280" ResizeMode="NoResize">
     <Grid>
         <Button x:Name="Button_Connection" Content="Connection" Width="100" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="581,346,593,315" Click="Click_connection" />
-        <Image x:Name="Azure_Logo" Source="Icon/icon.png" Margin="10,10,1184,602" Width="80" />
+        <Image x:Name="Azure_Logo" Source="/Icon/icon.png" Margin="10,10,1184,602" Width="80" />
     </Grid>
 </Window>
