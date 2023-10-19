@@ -40,7 +40,7 @@
     </Content>
     <Content Include="Icon\icon.png" />
     <Content Include="WpfWindow1.xaml">
-      <Resource>False</Resource>
+      <Resource>True</Resource>
     </Content>
   </ItemGroup>
   <ItemGroup>
