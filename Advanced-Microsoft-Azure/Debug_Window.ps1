@@ -15,21 +15,27 @@
 #
 ############################################################################################################################
 
-param(
-    [string]$logFilePath
-)
+$logFilePath = "C:\temp\test.log"
 
 if (Test-Path $logFilePath) {
-    # Define a function to continuously read the log file
-    function TailLog {
-        $file = Get-Content $logFilePath -Wait
-        foreach ($line in $file) {
-            Write-Host $line
-        }
+    $watcher = New-Object System.IO.FileSystemWatcher
+    $watcher.Path = (Get-Item $logFilePath).Directory.FullName
+    $watcher.Filter = (Get-Item $logFilePath).Name
+    $watcher.IncludeSubdirectories = $false
+
+    $onChanged = Register-ObjectEvent $watcher "Changed" -SourceIdentifier FileChanged -Action {
+        $content = Get-Content -Path $logFilePath
+        $content | ForEach-Object { Write-Host $_ }
     }
 
-    # Call the TailLog function to track the log file in real-time
-    TailLog
+    try {
+        while ($true) {
+            Start-Sleep -Seconds 1
+        }
+    } finally {
+        Unregister-Event -SourceIdentifier FileChanged
+        $watcher.Dispose()
+    }
 } else {
     Write-Host "The specified log file does not exist."
 }
