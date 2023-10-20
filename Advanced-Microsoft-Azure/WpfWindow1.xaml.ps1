@@ -15,6 +15,54 @@
 #
 ############################################################################################################################
 
+Add-Type -AssemblyName System.Windows.Forms
+
+# Create a window
+$Form = New-Object System.Windows.Forms.Form
+$Form.Text = "Fenêtre de Débogage PowerShell"
+$Form.Size = New-Object System.Drawing.Size(800,600)
+$Form.StartPosition = "CenterScreen"
+
+# Create a text box
+$TextBox = New-Object System.Windows.Forms.TextBox
+$TextBox.Multiline = $true
+$TextBox.ScrollBars = "Vertical"
+$TextBox.Dock = "Fill"
+
+# Add the text box to the window
+$Form.Controls.Add($TextBox)
+
+# Define the function to read the log file
+function Refresh-Log {
+    $content = Get-Content -Path "C:\temp\test.log" -Tail 50
+    $TextBox.Text = $content -join "`r`n"
+}
+
+# Refresh the content every few seconds
+$Timer = New-Object System.Windows.Forms.Timer
+$Timer.Interval = 500
+$Timer.Add_Tick({
+    Refresh-Log
+})
+$Timer.Start()
+
+# Close the form
+$Form.Add_Closed({
+    $Timer.Stop()
+})
+
+$Form.ShowDialog()
+
+
+
+
+
+
+
+
+
+
+
 # Import necessary libraries
 [System.Reflection.Assembly]::LoadWithPartialName("PresentationFramework") | Out-Null
 
@@ -84,3 +132,11 @@ function Click_Connection
 
 
 $window.ShowDialog()
+
+
+
+# Attendez la fin du script principal
+Wait-Process -Id $PID
+
+# Fermez la fenêtre de débogage à la fin du script principal
+$DebugWindow.CloseMainWindow()

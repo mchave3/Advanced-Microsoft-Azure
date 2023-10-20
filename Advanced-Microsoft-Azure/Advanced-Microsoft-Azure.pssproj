@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Advanced-Microsoft-Azure.ps1" />
+    <Compile Include="Debug.ps1" />
     <Compile Include="WpfWindow1.xaml.ps1">
       <SubType>Code</SubType>
       <DependentUpon>WpfWindow1.xaml</DependentUpon>
