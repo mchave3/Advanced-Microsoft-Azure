@@ -15,51 +15,24 @@
 #
 ############################################################################################################################
 
-Add-Type -AssemblyName System.Windows.Forms
+# Path to the Debug_Window.ps1 script
+$scriptPath = "$PSScriptRoot\Debug_Window.ps1"
 
-# Create a window
-$Form = New-Object System.Windows.Forms.Form
-$Form.Text = "Fenêtre de Débogage PowerShell"
-$Form.Size = New-Object System.Drawing.Size(800,600)
-$Form.StartPosition = "CenterScreen"
+# Check if the script "Debug_Window.ps1" exists
+if (Test-Path $scriptPath) {
+    # Path to the test.log log file
+    $logFilePath = "C:\temp\test.log"
 
-# Create a text box
-$TextBox = New-Object System.Windows.Forms.TextBox
-$TextBox.Multiline = $true
-$TextBox.ScrollBars = "Vertical"
-$TextBox.Dock = "Fill"
-
-# Add the text box to the window
-$Form.Controls.Add($TextBox)
-
-# Define the function to read the log file
-function Refresh-Log {
-    $content = Get-Content -Path "C:\temp\test.log" -Tail 50
-    $TextBox.Text = $content -join "`r`n"
+    # Check if the log file exists
+    if (Test-Path $logFilePath) {
+        # Launch the Debug_Window.ps1 script in a new PowerShell window
+        Start-Process powershell -ArgumentList "-NoExit -Command & '$scriptPath' -logFilePath '$logFilePath'"
+    } else {
+        Write-Host "The test.log log file does not exist at the specified path."
+    }
+} else {
+    Write-Host "The Debug_Window.ps1 script was not found at the specified path."
 }
-
-# Refresh the content every few seconds
-$Timer = New-Object System.Windows.Forms.Timer
-$Timer.Interval = 500
-$Timer.Add_Tick({
-    Refresh-Log
-})
-$Timer.Start()
-
-# Close the form
-$Form.Add_Closed({
-    $Timer.Stop()
-})
-
-$Form.ShowDialog()
-
-
-
-
-
-
-
-
 
 
 
@@ -132,11 +105,3 @@ function Click_Connection
 
 
 $window.ShowDialog()
-
-
-
-# Attendez la fin du script principal
-Wait-Process -Id $PID
-
-# Fermez la fenêtre de débogage à la fin du script principal
-$DebugWindow.CloseMainWindow()
