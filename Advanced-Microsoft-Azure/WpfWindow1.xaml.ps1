@@ -15,23 +15,24 @@
 #
 ############################################################################################################################
 
-# Path to the Debug_Window.ps1 script
-$scriptPath = "$PSScriptRoot\Debug_Window.ps1"
 
-# Check if the script "Debug_Window.ps1" exists
-if (Test-Path $scriptPath) {
-    # Path to the test.log log file
+# Chemin vers le script Debug_Window.ps1
+$scriptPath = Join-Path $PSScriptRoot "Debug_Window.ps1"
+
+# Vérifie si le script "Debug_Window.ps1" existe
+if (Test-Path $scriptPath -PathType Leaf) {
+    # Chemin vers le fichier journal test.log
     $logFilePath = "C:\temp\test.log"
 
-    # Check if the log file exists
-    if (Test-Path $logFilePath) {
-        # Launch the Debug_Window.ps1 script in a new PowerShell window
-        Start-Process powershell -ArgumentList "-NoExit -Command & '$scriptPath' -logFilePath '$logFilePath'"
+    # Vérifie si le fichier journal existe
+    if (Test-Path $logFilePath -PathType Leaf) {
+        # Lance le script Debug_Window.ps1 dans une nouvelle fenêtre PowerShell
+        Start-Process powershell -ArgumentList "-NoExit -File `"$scriptPath`""
     } else {
-        Write-Host "The test.log log file does not exist at the specified path."
+        Write-Host "Le fichier journal test.log n'existe pas à l'emplacement spécifié."
     }
 } else {
-    Write-Host "The Debug_Window.ps1 script was not found at the specified path."
+    Write-Host "Le script Debug_Window.ps1 n'a pas été trouvé à l'emplacement spécifié."
 }
 
 

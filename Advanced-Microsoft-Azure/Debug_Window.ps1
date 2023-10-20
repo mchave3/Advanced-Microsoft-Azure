@@ -24,13 +24,13 @@ if (Test-Path $logFilePath) {
     $watcher.IncludeSubdirectories = $false
 
     $onChanged = Register-ObjectEvent $watcher "Changed" -SourceIdentifier FileChanged -Action {
-        $content = Get-Content -Path $logFilePath
-        $content | ForEach-Object { Write-Host $_ }
+        $content = Get-Content -Path $logFilePath | Select-Object -Last 1
+        Write-Host $content
     }
 
     try {
         while ($true) {
-            Start-Sleep -Seconds 1
+            # Attendez indéfiniment les modifications du fichier
         }
     } finally {
         Unregister-Event -SourceIdentifier FileChanged
