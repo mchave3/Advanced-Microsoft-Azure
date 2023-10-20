@@ -8,7 +8,7 @@
         <Label x:Name="Label_Name" Content="Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87"/>
         <Label x:Name="Label_FirstName" Content="FirstName" HorizontalAlignment="Left" Margin="123,10,0,0" VerticalAlignment="Top" Width="103"/>
         
-        <TextBox x:Name="TextBox_Name" HorizontalAlignment="Left" Height="24" Margin="323,212,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TextBox_Name" HorizontalAlignment="Left" Height="24" Margin="323,212,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="120" TextChanged="Name_TextChanged"/>
         <TextBox x:Name="TextBox_FirstName" HorizontalAlignment="Left" Height="23" Margin="532,212,0,0" TextWrapping="Wrap" Text="First name" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

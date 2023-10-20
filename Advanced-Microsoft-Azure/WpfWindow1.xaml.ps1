@@ -24,13 +24,17 @@ function Import-Xaml {
 	$manager = New-Object System.Xml.XmlNamespaceManager -ArgumentList $xaml.NameTable
 	$manager.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml");
 	$xaml.SelectNodes("//*[@x:Name='Button_Connection']", $manager)[0].RemoveAttribute('Click')
+	$xaml.SelectNodes("//*[@x:Name='TextBox_Name']", $manager)[0].RemoveAttribute('TextChanged')
 	$xamlReader = New-Object System.Xml.XmlNodeReader $xaml
 	[Windows.Markup.XamlReader]::Load($xamlReader)
 }
 
 # Create a new variable that is a reference to a button in the user interface
 function Add-ControlVariables {
-	New-Variable -Name 'Button_Connection' -Value $window.FindName('Button_Connection') -Scope 1 -Force
+	New-Variable -Name 'Button_Connection' -Value $window.FindName('Button_Connection') -Scope 1 -Force	
+
+	New-Variable -Name 'TextBox_Name' -Value $window.FindName('TextBox_Name') -Scope 1 -Force
+	New-Variable -Name 'Lable_Name' -Value $window.FindName('Label_Name') -Scope 1 -Force
 }
 
 # Add an event handler to the 'Button_Connection' button
@@ -38,6 +42,10 @@ function Set-EventHandler {
 	$Button_Connection.add_Click({
 		param([System.Object]$sender,[System.Windows.RoutedEventArgs]$e)
 		Click_connection -sender $sender -e $e
+	})
+	$TextBox_Name.add_TextChanged({
+		param([System.Object]$sender,[System.Windows.Controls.TextChangedEventArgs]$e)
+		Name_TextChanged -sender $sender -e $e
 	})
 }
 
@@ -60,6 +68,12 @@ $window.TaskbarItemInfo.Description = $window.Title
 # Add control variables and set event handlers
 Add-ControlVariables
 Set-EventHandler
+
+function Name_TextChanged
+{
+	param($sender, $e)
+	$Lable_Name = $TextBox_Name
+}
 
 # Display the window to the user
 $window.ShowDialog()
