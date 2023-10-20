@@ -39,13 +39,13 @@ function Add-ControlVariables {
 
 # Add an event handler to the 'Button_Connection' button
 function Set-EventHandler {
-	$Button_Connection.add_Click({
-		param([System.Object]$sender,[System.Windows.RoutedEventArgs]$e)
-		Click_connection -sender $sender -e $e
-	})
 	$TextBox_Name.add_TextChanged({
 		param([System.Object]$sender,[System.Windows.Controls.TextChangedEventArgs]$e)
 		Name_TextChanged -sender $sender -e $e
+	})
+	$Button_Connection.add_Click({
+		param([System.Object]$sender,[System.Windows.RoutedEventArgs]$e)
+		Click_Connection -sender $sender -e $e
 	})
 }
 
@@ -76,4 +76,11 @@ function Name_TextChanged
 }
 
 # Display the window to the user
+function Click_Connection
+{
+	param($sender, $e)
+	$Lable_Name.Content = $TextBox_Name.text
+}
+
+
 $window.ShowDialog()
