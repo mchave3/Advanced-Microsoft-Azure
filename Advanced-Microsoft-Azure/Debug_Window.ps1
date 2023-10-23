@@ -15,26 +15,17 @@
 #
 ############################################################################################################################
 
+$DebugPreference = "Continue"
+
 $logFilePath = "C:\temp\test.log"
-
+$regex = '<!\[LOG\[(.*?)\]LOG\]!\>\<time="(\d{2}:\d{2}:\d{2}\.\d{3}-\d{2})" date="(\d{2}-\d{2}-\d{4})" component="(.*?)" context="" type="(\d)"\>'
 if (Test-Path $logFilePath) {
-    $watcher = New-Object System.IO.FileSystemWatcher
-    $watcher.Path = (Get-Item $logFilePath).Directory.FullName
-    $watcher.Filter = (Get-Item $logFilePath).Name
-    $watcher.IncludeSubdirectories = $false
-
-    $onChanged = Register-ObjectEvent $watcher "Changed" -SourceIdentifier FileChanged -Action {
-        $content = Get-Content -Path $logFilePath | Select-Object -Last 1
-        Write-Host $content
-    }
-
-    try {
-        while ($true) {
-            # Attendez indéfiniment les modifications du fichier
+    Get-Content $logFilePath -wait -tail 0 | ForEach-Object {
+        if ($_ -match $regex) {
+            $logString = $Matches[1]
+            $logTime = $Matches[2].Substring(0, 8)
+            Write-Debug "$logTime | $logString"
         }
-    } finally {
-        Unregister-Event -SourceIdentifier FileChanged
-        $watcher.Dispose()
     }
 } else {
     Write-Host "The specified log file does not exist."
