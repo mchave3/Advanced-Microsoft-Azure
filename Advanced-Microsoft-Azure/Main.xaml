@@ -3,12 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Advanced Microsoft Azure" Height="720" Width="1280" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="Button_Connection" Content="Connection" Width="100" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="581,346,593,315" Click="Click_Connection" />
+        <Button x:Name="Button_Connection" Content="Connection" Width="100" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="581,346,593,315"/>
         
         <Label x:Name="Label_Name" Content="Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87"/>
         <Label x:Name="Label_FirstName" Content="FirstName" HorizontalAlignment="Left" Margin="123,10,0,0" VerticalAlignment="Top" Width="103"/>
         
-        <TextBox x:Name="TextBox_Name" HorizontalAlignment="Left" Height="24" Margin="323,212,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="120" TextChanged="Name_TextChanged"/>
+        <TextBox x:Name="TextBox_Name" HorizontalAlignment="Left" Height="24" Margin="323,212,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="TextBox_FirstName" HorizontalAlignment="Left" Height="23" Margin="532,212,0,0" TextWrapping="Wrap" Text="First name" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

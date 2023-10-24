@@ -15,6 +15,10 @@
 #
 ############################################################################################################################
 
+param(
+    [string]$Logfile = $args[0]
+)
+
 # Set debug preference to "Continue" for enhanced debugging
 $DebugPreference = "Continue"
 
@@ -27,8 +31,8 @@ Write-Host "| User: $env:USERNAME"
 Write-Host "| Computer: $env:COMPUTERNAME"
 Write-Host "| ********************************************`n"
 
-# Define the path for the log file and the regular expression for parsing logs
-$logFilePath = "C:\temp\test.log"
+Write-Host $Logfile
+
 $regex = '<!\[LOG\[(.*?)\]LOG\]!\>\<time="(\d{2}:\d{2}:\d{2}\.\d{3}-\d{2})" date="(\d{2}-\d{2}-\d{4})" component="(.*?)" context="" type="(\d)"\>'
 
 # Check if the log file exists
