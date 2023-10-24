@@ -55,7 +55,7 @@ LogWrite "Initialisation..."
         $logFilePath = "C:\temp\test.log"
         if (Test-Path $logFilePath -PathType Leaf) {
             # Launch the Debug_Window.ps1 script in a new PowerShell window with the name "Debug Console"
-            Start-Process powershell -ArgumentList "-NoLogo -NoExit -File `"$scriptPath`" `"$Logfile`""
+            $process = Start-Process powershell -ArgumentList "-NoLogo -NoExit -File `"$scriptPath`" `"$Logfile`"" -PassThru
 
         } else {
             Write-Error "The test.log journal file does not exist at the specified location: $logFilePath"
@@ -111,6 +111,11 @@ Add-Type -AssemblyName PresentationCore, PresentationFramework
 # Add an event handler for the Closed event of the window
     $Window.Add_Closed({
         LogWrite "WPF window closed."
+        if(-not $process.HasExited) {
+            LogWrite "PowerShell process closed."
+            Start-Sleep -Seconds 2
+            Stop-Process -Id $process.Id
+        }
     })
 
 $Window.ShowDialog() | Out-Null
