@@ -15,23 +15,20 @@
 #
 ############################################################################################################################
 
-param(
-    [string]$Logfile = $args[0]
-)
+
+param($logFilePath)
 
 # Set debug preference to "Continue" for enhanced debugging
 $DebugPreference = "Continue"
 
 # Display welcome message and system information
-Write-Host "| ********************************************"
-Write-Host "|   Welcome to the PowerShell Debug Console"
-Write-Host "| ********************************************"
-Write-Host "| Date: $(Get-Date)"
-Write-Host "| User: $env:USERNAME"
-Write-Host "| Computer: $env:COMPUTERNAME"
-Write-Host "| ********************************************`n"
-
-Write-Host $Logfile
+Write-Host "| ********************************************" -ForegroundColor White
+Write-Host "|   Welcome to the PowerShell Debug Console" -ForegroundColor White
+Write-Host "| ********************************************" -ForegroundColor White
+Write-Host "| Date: $(Get-Date)" -ForegroundColor White
+Write-Host "| User: $env:USERNAME" -ForegroundColor White
+Write-Host "| Computer: $env:COMPUTERNAME" -ForegroundColor White
+Write-Host "| ********************************************`n" -ForegroundColor White
 
 $regex = '<!\[LOG\[(.*?)\]LOG\]!\>\<time="(\d{2}:\d{2}:\d{2}\.\d{3}-\d{2})" date="(\d{2}-\d{2}-\d{4})" component="(.*?)" context="" type="(\d)"\>'
 
