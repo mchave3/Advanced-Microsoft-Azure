@@ -27,20 +27,20 @@ BEGIN{
     $Global:Timer = New-Object System.Timers.Timer
     $Global:Timer.Interval = 1000  # Write logs to disk every second
 
+    # Open the file with exclusive access but allow others to read
+    $Global:Stream = [System.IO.FileStream]::new($Logfile, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::Read)
+    $Global:Writer = [System.IO.StreamWriter]::new($Global:Stream)
+
     # Event handler for the timer
     $Global:Timer.Add_Elapsed({
         if ($Global:LogList.Count -gt 0) {
-            # Open the file with exclusive access but allow others to read
-            $stream = [System.IO.FileStream]::new($Global:Logfile, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::Read)
-            $writer = [System.IO.StreamWriter]::new($stream)
-
             foreach ($logstring in $Global:LogList) {
                 # Write log information to the stream
-                $writer.WriteLine($logstring)
+                $Global:Writer.WriteLine($logstring)
             }
 
-            $writer.Close()
-            $stream.Close()
+            # Flush the log data to disk
+            $Global:Writer.Flush()
 
             # Clear the log list
             $Global:LogList.Clear()
@@ -77,6 +77,9 @@ PROCESS{
 
         # Add the log string to the log list
         $Global:LogList.Add($logstring)
+
+        # Flush the log data to disk
+        $Global:Writer.Flush()
     }
 
     ########################################################
@@ -158,22 +161,25 @@ PROCESS{
     }
 
 # END block: Finalization
-END{
+END {
     # Stop the timer and write any remaining logs to disk
     $Global:Timer.Stop()
     $Global:Timer.Dispose()
 
     if ($Global:LogList.Count -gt 0) {
-        # Open the file with exclusive access but allow others to read
-        $stream = [System.IO.FileStream]::new($Global:Logfile, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::Read)
-        $writer = [System.IO.StreamWriter]::new($stream)
-
         foreach ($logstring in $Global:LogList) {
             # Write log information to the stream
-            $writer.WriteLine($logstring)
+            $Global:Writer.WriteLine($logstring)
         }
 
-        $writer.Close()
-        $stream.Close()
+        # Flush the log data to disk
+        $Global:Writer.Flush()
+
+        # Clear the log list
+        $Global:LogList.Clear()
     }
+
+    # Close the writer and the stream
+    $Global:Writer.Close()
+    $Global:Stream.Close()
 }
