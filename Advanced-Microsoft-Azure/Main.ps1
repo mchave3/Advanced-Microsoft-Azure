@@ -83,7 +83,7 @@ Add-Type -AssemblyName PresentationCore, PresentationFramework
     if (Test-Path $iconPath -PathType Leaf) {
         $Window.Icon = [System.Windows.Media.Imaging.BitmapFrame]::Create($iconPath)
         $Window.TaskbarItemInfo = New-Object System.Windows.Shell.TaskbarItemInfo
-        $Window.TaskbarItemInfo.Description = "Your application description"
+        $Window.TaskbarItemInfo.Description = "Advanced Microsoft Azure"
         $Window.TaskbarItemInfo.Overlay = [System.Windows.Media.Imaging.BitmapFrame]::Create($iconPath)
     } else {
         Write-Error "The icon was not found."

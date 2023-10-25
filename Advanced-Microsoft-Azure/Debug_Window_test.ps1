@@ -1,20 +1,76 @@
-function Show-Progress {
-    param(
-        [Parameter(Mandatory=$true)]
-        [int]$Percent
-    )
+############################################################################################################################
+#
+# Version: 1.0
+#
+# Created: 24/10/2023
+#
+# Author: Mickael CHAVE
+#
+# Revisions:
+# ----------
+# 1.0    24/10/2023    Creation.
+#
+#
+# Purpose: This script provides a debug console for monitoring and parsing log files.
+#
+############################################################################################################################
 
-    $ProgressBarWidth = 50
-    $CompleteWidth = [math]::Round($Percent * $ProgressBarWidth / 100)
-    $IncompleteWidth = $ProgressBarWidth - $CompleteWidth
-
-    $ProgressBar = "[" + "-" * $CompleteWidth + (" " * $IncompleteWidth) + "]"
-    Write-Host "`r$ProgressBar $Percent% Complete" -NoNewline
+BEGIN{
+    param($logFilePath)
+    $stream = [System.IO.StreamReader]::new($logFilePath)
 }
+PROCESS{
+    # Set debug preference to "Continue" for enhanced debugging
+    $DebugPreference = "Continue"
 
-# Exemple d'utilisation
-for ($i = 0; $i -le 100; $i += 1) {
-    Show-Progress -Percent $i
-    Start-Sleep -Milliseconds 50
+    # Display welcome message and system information
+    Write-Host "| ********************************************" -ForegroundColor White
+    Write-Host "|   Welcome to the PowerShell Debug Console" -ForegroundColor White
+    Write-Host "| ********************************************" -ForegroundColor White
+    Write-Host "| Date: $(Get-Date)" -ForegroundColor White
+    Write-Host "| User: $env:USERNAME" -ForegroundColor White
+    Write-Host "| Computer: $env:COMPUTERNAME" -ForegroundColor White
+    Write-Host "| ********************************************`n" -ForegroundColor White
+
+    $regex = '<!\[LOG\[(.*?)\]LOG\]!\>\<time="(\d{2}:\d{2}:\d{2}\.\d{3}-\d{2})" date="(\d{2}-\d{2}-\d{4})" component="(.*?)" context="" type="(\d)"\>'
+
+    # Check if the log file exists
+    if (Test-Path $logFilePath) {
+        # Monitor and parse the log file content
+
+        while( -not $stream.EndOfStream) {
+            $values =  [string]($stream.ReadLine())
+            if (($value%10000) -eq 0) {
+                write-host $value
+            }
+        }
+
+
+        Get-Content $logFilePath -wait -tail 0 | ForEach-Object {
+            if ($_ -match $regex) {
+                $logString = $Matches[1]
+                $logTime = $Matches[2].Substring(0, 8)
+                $logLevel = $Matches[5]
+
+                # Display logs with different colors based on their log levels
+                if ($logLevel -ne 3) {
+                    if ($logLevel -eq 2) {
+                        Write-Host "WARNING : $logTime | $logString" -ForegroundColor Yellow
+                    }
+                    else {
+                        Write-Host "INFO    : $logTime | $logString" -ForegroundColor White
+                    }
+                }
+                else {
+                    Write-Host "ERROR   : $logTime | $logString" -ForegroundColor Red
+                }
+            }
+        }
+    } else {
+        # Display an error message if the log file does not exist
+        Write-Host "The specified log file does not exist."
+    }
 }
-Write-Host "`nProcessus terminé!"
+END{
+
+}
